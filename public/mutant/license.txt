@@ -1,0 +1,11 @@
+Model Information:
+* title:	Hardsurface Robot Head 1.0
+* source:	https://sketchfab.com/3d-models/hardsurface-robot-head-10-600321d2fe56421abd650c6ff0d39ec7
+* author:	DonislavTodorov (https://sketchfab.com/DonislavTodorov)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Hardsurface Robot Head 1.0" (https://sketchfab.com/3d-models/hardsurface-robot-head-10-600321d2fe56421abd650c6ff0d39ec7) by DonislavTodorov (https://sketchfab.com/DonislavTodorov) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
