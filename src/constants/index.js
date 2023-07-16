@@ -19,10 +19,16 @@ import {
   starbucks,
   tesla,
   shopify,
+  monzen,
+  ielts,
   carrent,
   jobit,
   tripguide,
+  imageination,
+  shloka,
+  pixaby,
   threejs,
+  pixaby,
 } from "../assets";
 
 export const navLinks = [
@@ -152,6 +158,37 @@ const experiences = [
       "And more than anything, you will have a part to play in helping other students ace their interviews and exams. ",
     ],
   },
+  {
+    title: "Web Development Intern",
+    company_name: "Monzen Sustainable Technologies",
+    icon: monzen,
+    iconBg: "#383E56",
+    date: "Mar 2023 - May 2023",
+    points: [
+      "During my internship with Monzen Sustainable Technologies, I had the privilege of contributing to the web development team and making a meaningful impact on various projects., students, clubs, student societies and other communities across campuses.",
+      "Key Accomplishments:",
+      "Successfully completed a 3-month internship, showcasing exceptional dedication and a strong work ethic.",
+      "Developed and maintained web applications using HTML, CSS, and JavaScript, ensuring optimal functionality.",
+      "Collaborated in meetings and brainstorming sessions, contributing innovative ideas to enhance project outcomes.",
+      "Assisted in debugging and troubleshooting website issues, demonstrating problem-solving abilities.",
+      "Worked closely with senior developers, acquiring valuable knowledge and improving coding skills.",
+      "Completed assigned projects within set deadlines, showcasing excellent time management."
+    ],
+  },
+  {
+    title: "Full-Stack Developer Intern",
+    company_name: "IELTS Proficiency",
+    icon: ielts,
+    iconBg: "#383E56",
+    date: "May 2023 - Present 2023",
+    points: [
+      "Developed admin-specific features and constructed an admin dashboard from scratch for IELTS Proficiency",
+      "Used Strapi CMS and Express, implementing an advanced architecture with MVC pattern for efficient data flow",
+      "Implemented a robust Restful Web Services API using Express.js, and PostgreSQL for seamless interaction", 
+      "Designed and implemented an end-to-end solution for efficient storage and retrieval of Student data",
+      "Incorporated Socket.IO to create interactive features like live chat, notifications, and real-time data updates.",
+    ],
+  },
 ];
 
 const testimonials = [
@@ -183,16 +220,20 @@ const testimonials = [
 
 const projects = [
   {
-    name: "WebRooms",
+    name: "Imageination",
     description:
-      "Online chat app with Socket.io and React using HarperDB for storing messages.Online chat app with Socket.io and React using HarperDB for storing messages.",
+      "A Text to Image FullStack application using Node.js, Express.js and MongoDB, and managed content  with Cloudinary.",
     tags: [
       {
         name: "react",
         color: "blue-text-gradient",
       },
       {
-        name: "Harperdb",
+        name: "nodejs",
+        color: "green-text-gradient",
+      },
+      {
+        name: "Cloudinary",
         color: "green-text-gradient",
       },
       {
@@ -200,8 +241,33 @@ const projects = [
         color: "pink-text-gradient",
       },
     ],
-    image: carrent,
-    source_code_link: "https://github.com/shivvamm/webroom.github.io",
+    image: imageination,
+    source_code_link: "https://github.com/shivvamm/imagegeneration",
+  },
+  {
+    name: "Shloka",
+    description:
+      "a Backend free Restful API serving quality Sanskrit Shlokas on Express.Js, Redis, Jest.Js",
+    tags: [
+      {
+        name: "nodejs",
+        color: "green-text-gradient",
+      },
+      {
+        name: "expressjs",
+        color: "green-text-gradient",
+      },
+      {
+        name: "redis",
+        color: "pink-text-gradient",
+      },
+      {
+        name: "jest.js",
+        color: "blue-text-gradient",
+      },
+    ],
+    image: shloka,
+    source_code_link: "https://github.com/shivvamm/shloka",
   },
   {
     name: "Lyriks",
@@ -225,9 +291,34 @@ const projects = [
     source_code_link: "https://sp-lyriks.netlify.app/",
   },
   {
-    name: "StoryBook",
+    name: "WebRooms",
     description:
-      "●  Developed a  single page website using core PHP .●  The website contains  a modern homepage, fully-fledged view section for posts and form with validation.",
+      "Online chat app with Socket.io and React using HarperDB for storing messages.Online chat app with Socket.io and React using HarperDB for storing messages.",
+    tags: [
+      {
+        name: "react",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "nodejs",
+        color: "green-text-gradient",
+      },
+      {
+        name: "Harperdb",
+        color: "green-text-gradient",
+      },
+      {
+        name: "tailwindCSS",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: carrent,
+    source_code_link: "https://github.com/shivvamm/webroom.github.io",
+  },
+  {
+    name: "PxabyApp",
+    description:
+      "Developed website using core PHP. The website contains  a modern homepage, fully-fledged view section for searching images and vedios from Pixaby.",
     tags: [
       {
         name: "PHP",
@@ -243,6 +334,27 @@ const projects = [
       },
     ],
     image: tripguide,
+    source_code_link: "https://github.com/shivvamm/Pixabyapp",
+  },
+  {
+    name: "StoryBook",
+    description:
+      "Developed a website using core PHP.   The website contains  a modern homepage, fully-fledged view section for posts and form with validation.",
+    tags: [
+      {
+        name: "PHP",
+        color: "blue-text-gradient",
+      },
+      {
+        name: "MySql",
+        color: "green-text-gradient",
+      },
+      {
+        name: "tailwindCSS",
+        color: "pink-text-gradient",
+      },
+    ],
+    image: pixaby,
     source_code_link: "https://github.com/shivvamm/Story_Book",
   },
 ];

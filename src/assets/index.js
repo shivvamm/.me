@@ -25,10 +25,14 @@ import meta from "./company/meta.png";
 import shopify from "./company/shopify.png";
 import starbucks from "./company/starbucks.png";
 import tesla from "./company/tesla.png";
-
+import monzen from "./company/monzen.jpg";
+import ielts from "./company/ieltsl.jpg";
 import carrent from "./carrent.png";
 import jobit from "./jobit.png";
+import imageination from "./imageination.png";
 import tripguide from "./tripguide.png";
+import shloka from "./shloka.png";
+import pixaby from "./pixaby.png";
 
 export {
   logo,
@@ -56,7 +60,12 @@ export {
   shopify,
   starbucks,
   tesla,
+  monzen,
+  ielts,
   carrent,
+  imageination,
   jobit,
+  shloka,
+  pixaby,
   tripguide,
 };
