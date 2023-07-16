@@ -26,7 +26,6 @@ import {
   tripguide,
   imageination,
   shloka,
-  pixaby,
   threejs,
   pixaby,
 } from "../assets";
@@ -333,7 +332,7 @@ const projects = [
         color: "pink-text-gradient",
       },
     ],
-    image: tripguide,
+    image: pixaby,
     source_code_link: "https://github.com/shivvamm/Pixabyapp",
   },
   {
@@ -354,7 +353,7 @@ const projects = [
         color: "pink-text-gradient",
       },
     ],
-    image: pixaby,
+    image: tripguide,
     source_code_link: "https://github.com/shivvamm/Story_Book",
   },
 ];
