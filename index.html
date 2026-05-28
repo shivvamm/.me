@@ -1,13 +1,927 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shivam Pandey</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shivam Pandey — AI Engineer · Agents · RAG · Voice</title>
+<meta name="description" content="AI Engineer building LLM-powered agentic systems, RAG pipelines, and voice-first interfaces in production." />
+<meta name="author" content="Shivam Pandey" />
+<meta name="theme-color" content="#F4F1E8" />
+<meta name="color-scheme" content="light" />
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="alternate icon" href="favicon.svg" />
+<link rel="apple-touch-icon" href="favicon.svg" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Shivam Pandey — AI Engineer" />
+<meta property="og:description" content="AI Engineer building LLM-powered agentic systems, RAG pipelines, and voice-first interfaces in production." />
+<meta property="og:image" content="og-image.svg" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Shivam Pandey — AI Engineer" />
+<meta name="twitter:description" content="Agents · RAG · Voice AI · in production." />
+<meta name="twitter:image" content="og-image.svg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    --bg:#F4F1E8;
+    --ink:#0A0A0A;
+    --pink:#FF3EA5;
+    --cyan:#00E5FF;
+    --lime:#CBFF3E;
+    --violet:#7C3AED;
+    --orange:#FF6B35;
+  }
+  *{ -webkit-font-smoothing:antialiased; }
+  html,body{ background:var(--bg); color:var(--ink); font-family:'Space Grotesk', sans-serif; overflow-x:hidden; }
+  .font-display{ font-family:'Archivo Black', 'Archivo', sans-serif; letter-spacing:-0.03em; }
+  .font-mono{ font-family:'JetBrains Mono', monospace; }
+  /* Brutalist primitives */
+  .brut{ border:3px solid var(--ink); box-shadow:8px 8px 0 0 var(--ink); background:#fff; transition: transform .15s steps(2), box-shadow .15s steps(2); }
+  .brut:hover{ transform:translate(-3px,-3px); box-shadow:12px 12px 0 0 var(--ink); }
+  .brut-press:active{ transform:translate(4px,4px); box-shadow:2px 2px 0 0 var(--ink); }
+  .brut-sm{ border:2px solid var(--ink); box-shadow:4px 4px 0 0 var(--ink); }
+  .ink-line{ border:2px solid var(--ink); }
+  /* Noise overlay */
+  .noise::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:1;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:.35; mix-blend-mode:multiply;
+  }
+  /* Grid bg */
+  .grid-bg{
+    background-image:
+      linear-gradient(var(--ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: -1px -1px;
+    opacity:.06;
+  }
+  /* Marquee */
+  .marquee{ display:flex; gap:2rem; animation: m 28s linear infinite; }
+  @keyframes m { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  /* Sticker */
+  .sticker{
+    background:var(--lime); border:3px solid var(--ink); box-shadow:5px 5px 0 var(--ink);
+    padding:.35rem .75rem; display:inline-flex; gap:.35rem; align-items:center;
+    font-family:'Archivo Black'; text-transform:uppercase; font-size:.75rem; letter-spacing:.06em;
+  }
+  /* Reveal */
+  .reveal{ opacity:0; transform: translateY(40px) rotate(-1deg); }
+  /* Link underline */
+  .u-link{ position:relative; display:inline-block; }
+  .u-link::after{
+    content:""; position:absolute; left:0; bottom:-2px; width:100%; height:3px; background:var(--ink);
+    transform:scaleX(0); transform-origin:right; transition:transform .25s;
+  }
+  .u-link:hover::after{ transform:scaleX(1); transform-origin:left; }
+  /* Marker highlight */
+  .marker{ background:linear-gradient(180deg, transparent 55%, var(--cyan) 55%); padding: 0 .15em; }
+  .marker-pink{ background:linear-gradient(180deg, transparent 55%, var(--pink) 55%); padding: 0 .15em; }
+  /* Star shape via clip */
+  .star-shape{ clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); }
+  /* Spin */
+  .spin{ animation: spin 18s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* Marquee ticker color swap */
+  .tick-item:nth-child(odd){ color:var(--pink); }
+  .tick-item:nth-child(even){ color:var(--violet); }
+  /* Cursor blob */
+  #blob{
+    position:fixed; width:24px; height:24px; border:2px solid var(--ink); border-radius:50%;
+    pointer-events:none; z-index:60; mix-blend-mode:difference; transition: transform .15s, width .2s, height .2s;
+    transform:translate(-50%,-50%); background:var(--lime);
+  }
+  /* Tag chip */
+  .chip{ border:2px solid var(--ink); padding:.2rem .55rem; font-family:'JetBrains Mono'; font-size:.7rem; font-weight:700; background:#fff; text-transform:uppercase; }
+  /* Glitch */
+  .glitch{ position:relative; }
+  .glitch::before, .glitch::after{
+    content:attr(data-text); position:absolute; left:0; top:0; width:100%; overflow:hidden;
+  }
+  .glitch::before{ color:var(--pink); transform:translate(3px,0); clip-path: polygon(0 0,100% 0,100% 45%,0 45%); }
+  .glitch::after{ color:var(--cyan); transform:translate(-3px,0); clip-path: polygon(0 55%,100% 55%,100% 100%,0 100%); }
+  /* Section label */
+  .sec-label{ display:inline-flex; align-items:center; gap:.5rem; font-family:'JetBrains Mono'; font-size:.75rem; font-weight:700; text-transform:uppercase; padding:.3rem .65rem; border:2px solid var(--ink); background:#fff; }
+  .sec-label::before{ content:""; width:8px; height:8px; background:var(--ink); border-radius:50%; animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.2} }
+  /* Scroll progress */
+  #progress{ position:fixed; top:0; left:0; height:4px; background:var(--pink); width:0; z-index:70; transition:width .08s linear; border-right:2px solid var(--ink); }
+  /* Scroll hint */
+  .scroll-hint{ display:inline-flex; flex-direction:column; align-items:center; gap:.25rem; font-family:'JetBrains Mono'; font-size:.65rem; font-weight:700; text-transform:uppercase; }
+  .scroll-hint .bar{ width:2px; height:28px; background:var(--ink); transform-origin:top; animation:scroll-dash 1.6s ease-in-out infinite; }
+  @keyframes scroll-dash { 0%{transform:scaleY(0); transform-origin:top} 50%{transform:scaleY(1); transform-origin:top} 51%{transform:scaleY(1); transform-origin:bottom} 100%{transform:scaleY(0); transform-origin:bottom} }
+  /* Live panel */
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:var(--lime); box-shadow:0 0 0 0 rgba(203,255,62,.7); animation: live 1.6s infinite; border:1.5px solid var(--ink); }
+  @keyframes live { 0%{box-shadow:0 0 0 0 rgba(203,255,62,.8)} 70%{box-shadow:0 0 0 10px rgba(203,255,62,0)} 100%{box-shadow:0 0 0 0 rgba(203,255,62,0)} }
+  /* Count up target */
+  .count{ font-variant-numeric: tabular-nums; }
+  /* Underline squiggle */
+  .squiggle{ display:inline-block; position:relative; }
+  .squiggle::after{ content:""; position:absolute; left:-2%; right:-2%; bottom:-.12em; height:.35em;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'><path d='M0 6 Q 15 0 30 6 T 60 6 T 90 6 T 120 6' stroke='%23FF3EA5' stroke-width='3' fill='none'/></svg>");
+    background-repeat:no-repeat; background-size:100% 100%; }
+  /* Responsive tweaks */
+  @media (max-width:768px){
+    .brut, .brut:hover{ box-shadow:5px 5px 0 var(--ink); transform:none; }
+    .brut-sm{ box-shadow:3px 3px 0 var(--ink); }
+    .sticker{ box-shadow:3px 3px 0 var(--ink); font-size:.65rem; padding:.3rem .55rem; }
+    .grid-bg{ background-size: 32px 32px; }
+    h1, h2 { word-break: break-word; }
+  }
+  @media (max-width:480px){
+    nav.brut { padding: .5rem .75rem !important; }
+    nav.brut a:first-child { font-size: .85rem; }
+    .sec-label{ font-size:.65rem; padding:.25rem .5rem; }
+  }
+  /* Never horizontal scroll */
+  html, body { max-width: 100vw; }
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+    .marquee, .spin{ animation: none !important; }
+  }
+</style>
+</head>
+<body class="noise">
+
+<div id="progress"></div>
+<div id="blob"></div>
+
+<!-- Background grid -->
+<div class="grid-bg fixed inset-0 pointer-events-none"></div>
+
+<!-- ======================= NAV ======================= -->
+<header class="fixed top-4 left-4 right-4 z-50">
+  <nav class="brut flex items-center justify-between gap-2 px-3 md:px-5 py-3 bg-white">
+    <a href="#top" class="font-display text-sm md:text-xl tracking-tighter flex items-center gap-2 shrink-0">
+      <span class="inline-block w-3 h-3 bg-[var(--pink)] border-2 border-black"></span>
+      <span class="hidden sm:inline">SHIVAM<span class="text-[var(--pink)]">·</span>PANDEY</span>
+      <span class="sm:hidden">S·P</span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm font-semibold uppercase tracking-wider">
+      <a href="#work" class="u-link">Work</a>
+      <a href="#stack" class="u-link">Stack</a>
+      <a href="#about" class="u-link">About</a>
+      <a href="#contact" class="u-link">Contact</a>
+    </div>
+    <a href="#contact" class="brut-sm brut-press px-3 md:px-4 py-2 bg-[var(--lime)] font-display text-xs md:text-sm uppercase cursor-pointer whitespace-nowrap">Let's Build →</a>
+  </nav>
+</header>
+
+<!-- ======================= HERO ======================= -->
+<section id="top" class="relative pt-32 md:pt-36 pb-20 px-4 md:px-8">
+  <div class="max-w-7xl mx-auto relative">
+
+    <div class="grid md:grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT: Headline -->
+      <div class="md:col-span-8">
+        <div class="flex flex-wrap items-center gap-3 mb-6">
+          <span class="sec-label">AI Engineer · Noida, India</span>
+          <span class="font-mono text-xs uppercase opacity-70">EST. 2024</span>
+        </div>
+
+        <h1 class="font-display leading-[0.85] text-[14vw] md:text-[9.5vw] uppercase">
+          <span class="block" id="h1-l1">Shivam</span>
+          <span class="block" id="h1-l2">Pandey<span class="text-[var(--pink)]">.</span></span>
+        </h1>
+
+        <p class="mt-6 text-2xl md:text-4xl font-display uppercase leading-[1] tracking-tight" id="h1-l3">
+          I build <span class="squiggle">agentic&nbsp;AI</span><br class="md:hidden"/> that actually ships.
+        </p>
+
+        <p class="mt-6 text-base md:text-lg leading-snug font-medium max-w-2xl opacity-90">
+          AI Engineer at <span class="marker">Jellyfish Technologies</span>.
+          I design <strong>LLM agents, RAG pipelines,</strong> and <strong>voice-first</strong> interfaces
+          built to run in production — not just demos.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#work" class="brut brut-press px-6 py-4 bg-[var(--ink)] text-white font-display uppercase cursor-pointer inline-flex items-center gap-2">See the work
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </a>
+          <a href="#contact" class="brut brut-press px-6 py-4 bg-[var(--cyan)] font-display uppercase cursor-pointer inline-flex items-center gap-2">Hire me
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://github.com/shivvamm" target="_blank" rel="noopener" class="brut brut-press px-6 py-4 bg-white font-display uppercase cursor-pointer inline-flex items-center gap-2">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57v-2c-3.34.72-4.03-1.6-4.03-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.08-.74.09-.73.09-.73 1.2.08 1.83 1.23 1.83 1.23 1.07 1.82 2.8 1.3 3.48 1 .11-.77.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.3.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.3c0 .31.2.69.84.57A12 12 0 0 0 12 .3"/></svg>
+            GitHub
+          </a>
+          <a href="https://linkedin.com/in/shivvamm" target="_blank" rel="noopener" class="brut brut-press px-6 py-4 bg-[#0077B5] text-white font-display uppercase cursor-pointer inline-flex items-center gap-2">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true">
+              <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.86-3.04-1.86 0-2.15 1.45-2.15 2.95v5.66H9.32V9h3.41v1.56h.05c.48-.9 1.63-1.86 3.36-1.86 3.59 0 4.26 2.37 4.26 5.45v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+            </svg>
+            LinkedIn
+          </a>
+          <a href="https://twitter.com/Shivv71" target="_blank" rel="noopener" class="brut brut-press px-6 py-4 bg-[var(--pink)] text-white font-display uppercase cursor-pointer inline-flex items-center gap-2">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            Twitter
+          </a>
+          <a href="ShivamPandey_.pdf" target="_blank" rel="noopener" class="brut brut-press px-6 py-4 bg-[var(--lime)] font-display uppercase cursor-pointer inline-flex items-center gap-2">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Resume
+          </a>
+          <a href="https://huggingface.co/shivvamm" target="_blank" rel="noopener" class="brut brut-press px-6 py-4 bg-[#FFD21E] font-display uppercase cursor-pointer inline-flex items-center gap-2">
+            <svg viewBox="0 0 32 32" class="w-5 h-5" aria-hidden="true">
+              <circle cx="16" cy="16" r="13" fill="#FFD21E" stroke="#0A0A0A" stroke-width="2"/>
+              <circle cx="11" cy="14" r="2" fill="#0A0A0A"/>
+              <circle cx="21" cy="14" r="2" fill="#0A0A0A"/>
+              <path d="M10 19 Q16 25 22 19" fill="none" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="7" cy="19" r="2" fill="#FF3EA5" stroke="#0A0A0A" stroke-width="1.5"/>
+              <circle cx="25" cy="19" r="2" fill="#FF3EA5" stroke="#0A0A0A" stroke-width="1.5"/>
+            </svg>
+            Hugging Face
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Status Panel -->
+      <aside class="md:col-span-4 space-y-4 md:sticky md:top-28">
+        <div class="brut bg-white p-5">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-black">
+            <div class="flex items-center gap-2">
+              <span class="live-dot"></span>
+              <span class="font-mono text-[10px] uppercase font-bold">Status · Live</span>
+            </div>
+            <span class="font-mono text-[10px] opacity-60">v2026</span>
+          </div>
+
+          <dl class="space-y-3 font-mono text-sm">
+            <div class="flex justify-between items-baseline">
+              <dt class="opacity-70 uppercase text-[11px]">Role</dt>
+              <dd class="font-bold">AI Engineer</dd>
+            </div>
+            <div class="flex justify-between items-baseline">
+              <dt class="opacity-70 uppercase text-[11px]">Company</dt>
+              <dd class="font-bold">Jellyfish Tech.</dd>
+            </div>
+            <div class="flex justify-between items-baseline">
+              <dt class="opacity-70 uppercase text-[11px]">Focus</dt>
+              <dd class="font-bold">Agents · RAG · Voice</dd>
+            </div>
+            <div class="flex justify-between items-baseline">
+              <dt class="opacity-70 uppercase text-[11px]">Open to</dt>
+              <dd class="font-bold text-[var(--pink)]">New projects ✱</dd>
+            </div>
+          </dl>
+
+          <div class="mt-4 pt-3 border-t-2 border-black">
+            <div class="font-mono text-[10px] uppercase opacity-70 mb-1">Currently building</div>
+            <div class="font-display text-sm uppercase leading-tight">Multimodal voice-sales agent (9k+ indexed)</div>
+          </div>
+
+          <a href="ShivamPandey_.pdf" target="_blank" rel="noopener" class="mt-4 brut-sm brut-press bg-[var(--ink)] text-white w-full py-3 px-4 font-display uppercase text-sm cursor-pointer inline-flex items-center justify-center gap-2">
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download CV / Résumé
+          </a>
+        </div>
+
+        <!-- Mini metric pair -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="brut-sm bg-[var(--lime)] p-3">
+            <div class="font-display text-3xl leading-none count" data-to="91">0</div>
+            <div class="font-mono text-[10px] uppercase mt-1">Precision % · agents</div>
+          </div>
+          <div class="brut-sm bg-[var(--pink)] text-white p-3">
+            <div class="font-display text-3xl leading-none count" data-to="9000" data-suffix="+">0</div>
+            <div class="font-mono text-[10px] uppercase mt-1">Chunks · indexed</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="mt-16 flex items-center gap-4">
+      <div class="scroll-hint opacity-70"><span class="bar"></span>Scroll</div>
+      <div class="h-[2px] flex-1 bg-black/20"></div>
+      <div class="font-mono text-[10px] uppercase opacity-60 tracking-widest">01 / Work · 02 / Stack · 03 / About · 04 / Contact</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= STATS STRIP ======================= -->
+<section class="relative px-4 md:px-8 mb-10">
+  <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-0 brut bg-white overflow-hidden">
+    <div class="p-5 md:p-6 border-b-[3px] md:border-b-0 md:border-r-[3px] border-black">
+      <div class="font-display text-4xl md:text-6xl leading-none count" data-to="2" data-suffix="Y">0</div>
+      <div class="font-mono text-[11px] uppercase opacity-70 mt-2">Shipping agentic AI</div>
+    </div>
+    <div class="p-5 md:p-6 border-b-[3px] md:border-b-0 md:border-r-[3px] border-black bg-[var(--bg)]">
+      <div class="font-display text-4xl md:text-6xl leading-none count" data-to="7" data-suffix="+">0</div>
+      <div class="font-mono text-[11px] uppercase opacity-70 mt-2">Production systems</div>
+    </div>
+    <div class="p-5 md:p-6 md:border-r-[3px] border-black">
+      <div class="font-display text-3xl md:text-6xl leading-none whitespace-nowrap"><span class="count" data-to="4">0</span><span class="text-[var(--pink)]">×</span>H100</div>
+      <div class="font-mono text-[11px] uppercase opacity-70 mt-2">GPUs · Mistral-7B DDP</div>
+    </div>
+    <div class="p-5 md:p-6 bg-[var(--ink)] text-white">
+      <div class="font-display text-4xl md:text-6xl leading-none count" data-to="13" data-suffix="s">0</div>
+      <div class="font-mono text-[11px] uppercase opacity-70 mt-2 text-[var(--lime)]">P99 first-token latency</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TICKER ======================= -->
+<section class="relative border-y-[3px] border-black bg-[var(--ink)] text-[var(--bg)] py-4 overflow-hidden my-10">
+  <div class="marquee font-display text-3xl md:text-5xl uppercase whitespace-nowrap">
+    <div class="flex gap-8 pr-8">
+      <span class="tick-item">★ LLM Agents</span><span>/</span>
+      <span class="tick-item">★ RAG at scale</span><span>/</span>
+      <span class="tick-item">★ Voice AI</span><span>/</span>
+      <span class="tick-item">★ Fine-tuning</span><span>/</span>
+      <span class="tick-item">★ Knowledge Graphs</span><span>/</span>
+      <span class="tick-item">★ Multimodal</span><span>/</span>
+    </div>
+    <div class="flex gap-8 pr-8" aria-hidden="true">
+      <span class="tick-item">★ LLM Agents</span><span>/</span>
+      <span class="tick-item">★ RAG at scale</span><span>/</span>
+      <span class="tick-item">★ Voice AI</span><span>/</span>
+      <span class="tick-item">★ Fine-tuning</span><span>/</span>
+      <span class="tick-item">★ Knowledge Graphs</span><span>/</span>
+      <span class="tick-item">★ Multimodal</span><span>/</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WORK ======================= -->
+<section id="work" class="relative py-20 px-4 md:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-12">
+      <div>
+        <span class="sec-label mb-4 inline-flex">Selected Work · 2024–2026</span>
+        <h2 class="font-display text-5xl md:text-7xl uppercase leading-none mt-4">
+          Shipped <span class="marker-pink">systems</span>,<br/>not slides.
+        </h2>
+      </div>
+      <p class="max-w-md font-medium text-base md:text-lg opacity-80">
+        A selection of production AI systems I've architected end-to-end — from agent orchestration to voice pipelines.
+      </p>
+    </div>
+
+    <!-- Project Grid -->
+    <div class="grid md:grid-cols-12 gap-6 reveal">
+
+      <!-- P1 : 1N20 -->
+      <a href="projects/1n20.html" class="project-card md:col-span-7 brut bg-white p-6 md:p-8 relative overflow-hidden cursor-pointer block no-underline text-inherit" style="background:#FFF6F0;">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <div class="font-mono text-xs uppercase opacity-70">01 / Voice AI · Sales Agent</div>
+            <h3 class="font-display text-3xl md:text-4xl uppercase mt-1">1N20 Home Services</h3>
+          </div>
+          <span class="sticker" style="background:var(--cyan);">LIVE</span>
+        </div>
+        <!-- Mini preview mock -->
+        <div class="ink-line bg-[var(--ink)] text-[var(--lime)] font-mono text-xs p-4 mb-4 h-40 overflow-hidden relative">
+          <div class="opacity-60">$ voice-agent --session=8a2f --mode=sales</div>
+          <div>◉ STT stream open · GPT-4o-mini</div>
+          <div>▸ customer: "need 12ft patio door, white"</div>
+          <div class="text-[var(--pink)]">▸ agent.handoff → sales_guide</div>
+          <div>▸ RAG pinecone ← 9,000 chunks</div>
+          <div>▸ retrieved: patio_door_12ft_white.jpg + 3 specs</div>
+          <div class="text-[var(--cyan)]">▸ lead ▷ mongo · email queued</div>
+          <div class="absolute bottom-2 left-2 right-2 flex gap-1">
+            <span class="bg-[var(--pink)] h-2 flex-1"></span>
+            <span class="bg-[var(--lime)] h-2 w-4"></span>
+            <span class="bg-[var(--cyan)] h-2 w-2"></span>
+          </div>
+        </div>
+        <p class="text-sm md:text-base font-medium leading-snug mb-4">
+          Dual-agent orchestration (data-capture → sales) with 12+ tools, shared memory, and persistent sessions.
+          Multimodal RAG over <strong>9,000+ indexed products</strong> with image responses. Real-time WebSocket voice pipeline.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="chip">OpenAI Agents SDK</span>
+          <span class="chip" style="background:var(--lime);">Pinecone</span>
+          <span class="chip">FastAPI</span>
+          <span class="chip">WebSocket</span>
+          <span class="chip">MongoDB</span>
+        </div>
+      </a>
+
+      <!-- P2 : Levett -->
+      <a href="projects/levett.html" class="project-card md:col-span-5 brut bg-white p-6 md:p-8 relative cursor-pointer block no-underline text-inherit" style="background:#EAF5FF;">
+        <div class="font-mono text-xs uppercase opacity-70">02 / RAG · Enterprise</div>
+        <h3 class="font-display text-3xl md:text-4xl uppercase mt-1">Levett Consultancy</h3>
+        <div class="my-4 grid grid-cols-3 gap-2">
+          <div class="ink-line p-2 bg-white"><div class="font-display text-3xl">94%</div><div class="font-mono text-[10px] uppercase">escalation precision</div></div>
+          <div class="ink-line p-2 bg-white"><div class="font-display text-3xl">92%</div><div class="font-mono text-[10px] uppercase">intent accuracy</div></div>
+          <div class="ink-line p-2 bg-[var(--pink)] text-white"><div class="font-display text-3xl">13s</div><div class="font-mono text-[10px] uppercase">p99 first-token</div></div>
+        </div>
+        <p class="text-sm font-medium leading-snug mb-4">
+          AI-powered IT-support automation for schools. Multi-source RAG across <strong>15 years</strong> of knowledge base + Google/MSFT docs. Guardrails-enforced auto-responses.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="chip">Vertex AI</span>
+          <span class="chip">LangChain</span>
+          <span class="chip">Guardrails</span>
+          <span class="chip">GCP</span>
+        </div>
+      </a>
+
+      <!-- P3 : Legal -->
+      <a href="projects/legal-assistant.html" class="project-card md:col-span-4 brut bg-white p-6 md:p-8 relative cursor-pointer block no-underline text-inherit" style="background:#F6F1FF;">
+        <div class="font-mono text-xs uppercase opacity-70">03 / Fine-tune · LoRA</div>
+        <h3 class="font-display text-2xl md:text-3xl uppercase mt-1">Legal Assistant <span class="text-[var(--violet)]">/ IPC</span></h3>
+        <div class="my-4 brut-sm p-3 bg-white">
+          <div class="font-mono text-[10px] uppercase opacity-60">INPUT</div>
+          <div class="font-mono text-xs">"What are IPC §420 penalties?"</div>
+          <div class="font-mono text-[10px] uppercase opacity-60 mt-2">AGENT → Retrieve → Cite</div>
+          <div class="font-display text-lg">§420 · ≤ 7 yrs + fine</div>
+          <div class="font-mono text-[10px]">↳ source: IPC_amend_2023.pdf §420</div>
+        </div>
+        <p class="text-sm font-medium leading-snug mb-4">
+          Gemma-2B fine-tuned with PEFT/LoRA. Multi-agent orchestration + citation-grounded retrieval. <strong>85%</strong> accuracy on complex queries.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="chip">Gemma 2B</span>
+          <span class="chip">PEFT</span>
+          <span class="chip">LoRA</span>
+        </div>
+      </a>
+
+      <!-- P4 : Insurance -->
+      <a href="projects/insurance-verifier.html" class="project-card md:col-span-4 brut bg-[var(--ink)] text-white p-6 md:p-8 relative cursor-pointer block no-underline">
+        <div class="font-mono text-xs uppercase text-[var(--lime)]">04 / Agentic · Verification</div>
+        <h3 class="font-display text-2xl md:text-3xl uppercase mt-1">Insurance Verifier</h3>
+        <div class="my-4 space-y-1">
+          <div class="flex items-center gap-2 font-mono text-xs"><span class="w-3 h-3 bg-[var(--lime)] border border-white"></span>extract policy.services[]</div>
+          <div class="flex items-center gap-2 font-mono text-xs"><span class="w-3 h-3 bg-[var(--cyan)] border border-white"></span>cross-verify → claim.items[]</div>
+          <div class="flex items-center gap-2 font-mono text-xs"><span class="w-3 h-3 bg-[var(--pink)] border border-white"></span>reason · assign · flag</div>
+          <div class="flex items-center gap-2 font-mono text-xs"><span class="w-3 h-3 bg-white"></span>reviewer ← output</div>
+        </div>
+        <p class="text-sm font-medium leading-snug mb-4 opacity-90">
+          Multi-step reasoning agent that autonomously cross-verifies services across insurance documents. <strong class="text-[var(--lime)]">91% precision</strong> in production.
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="chip" style="background:var(--lime); color:black;">GPT-4</span>
+          <span class="chip" style="background:white; color:black;">Agents</span>
+        </div>
+      </a>
+
+      <!-- P5 : Complaint -->
+      <a href="projects/complaint-system.html" class="project-card md:col-span-4 brut bg-white p-6 md:p-8 relative cursor-pointer block no-underline text-inherit" style="background:var(--lime);">
+        <div class="font-mono text-xs uppercase">05 / Multimodal · Voice</div>
+        <h3 class="font-display text-2xl md:text-3xl uppercase mt-1">Auto Complaint System</h3>
+        <div class="my-4 grid grid-cols-3 gap-1 text-center">
+          <div class="ink-line bg-white p-2"><div class="font-display text-xs">WHISPER</div><div class="font-mono text-[10px]">STT v3</div></div>
+          <div class="ink-line bg-[var(--ink)] text-white p-2"><div class="font-display text-xs">GPT-4</div><div class="font-mono text-[10px]">reason</div></div>
+          <div class="ink-line bg-white p-2"><div class="font-display text-xs">TWILIO</div><div class="font-mono text-[10px]">dispatch</div></div>
+        </div>
+        <p class="text-sm font-medium leading-snug">
+          End-to-end autonomous complaint registration: speech → reasoning → action dispatch → ticket. Zero human-in-loop.
+        </p>
+      </a>
+
+      <!-- P6 : Fine-tune -->
+      <a href="projects/mistral-finetune.html" class="project-card md:col-span-7 brut bg-white p-6 md:p-8 relative cursor-pointer flex flex-col md:flex-row gap-6 no-underline text-inherit">
+        <div class="flex-1">
+          <div class="font-mono text-xs uppercase opacity-70">06 / Performance · Fine-tuning</div>
+          <h3 class="font-display text-2xl md:text-3xl uppercase mt-1">Mistral-7B DDP on 4× H100</h3>
+          <p class="text-sm font-medium leading-snug mt-3">
+            Fine-tuned Mistral-7B with Distributed Data Parallel across 4×H100 GPUs. Cut training cycle from <strong>6 days to 2</strong>, boosted domain accuracy for insurance vertical.
+          </p>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <span class="chip">Mistral-7B</span>
+            <span class="chip" style="background:var(--pink); color:white;">DDP</span>
+            <span class="chip">PyTorch</span>
+            <span class="chip">4×H100</span>
+          </div>
+        </div>
+        <!-- Before/after bar viz -->
+        <div class="md:w-52 flex flex-col justify-center gap-2">
+          <div>
+            <div class="font-mono text-[10px] uppercase mb-1">Before · 6d</div>
+            <div class="ink-line h-6 bg-white"><div class="h-full bg-[var(--ink)]" style="width:100%"></div></div>
+          </div>
+          <div>
+            <div class="font-mono text-[10px] uppercase mb-1">After · 2d ⚡ 3×</div>
+            <div class="ink-line h-6 bg-white"><div class="h-full bg-[var(--lime)]" style="width:33%"></div></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- P7 : Document Intelligence -->
+      <a href="projects/document-intelligence.html" class="project-card md:col-span-5 brut bg-white p-6 md:p-8 relative cursor-pointer block no-underline text-inherit" style="background:#FFEEEE;">
+        <div class="font-mono text-xs uppercase opacity-70">07 / Neo4j · Knowledge Graph</div>
+        <h3 class="font-display text-2xl md:text-3xl uppercase mt-1">Document Intelligence</h3>
+        <!-- Mini node viz -->
+        <svg viewBox="0 0 280 120" class="w-full my-3" aria-hidden="true">
+          <g stroke="#0A0A0A" stroke-width="2">
+            <line x1="60" y1="60" x2="140" y2="30"/>
+            <line x1="60" y1="60" x2="140" y2="90"/>
+            <line x1="140" y1="30" x2="220" y2="60"/>
+            <line x1="140" y1="90" x2="220" y2="60"/>
+            <line x1="140" y1="30" x2="140" y2="90"/>
+          </g>
+          <circle cx="60" cy="60" r="18" fill="#FF3EA5" stroke="#0A0A0A" stroke-width="3"/>
+          <circle cx="140" cy="30" r="14" fill="#00E5FF" stroke="#0A0A0A" stroke-width="3"/>
+          <circle cx="140" cy="90" r="14" fill="#CBFF3E" stroke="#0A0A0A" stroke-width="3"/>
+          <circle cx="220" cy="60" r="18" fill="#fff" stroke="#0A0A0A" stroke-width="3"/>
+          <text x="60" y="64" text-anchor="middle" font-family="Archivo Black" font-size="10" fill="#fff">DOC</text>
+          <text x="220" y="64" text-anchor="middle" font-family="Archivo Black" font-size="10">REL</text>
+        </svg>
+        <p class="text-sm font-medium leading-snug">
+          OCR + LLM extraction → Neo4j knowledge graph for intuitive data exploration. <strong>50% reduction</strong> in manual processing.
+        </p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= STACK ======================= -->
+<section id="stack" class="relative py-20 px-4 md:px-8 bg-[var(--ink)] text-[var(--bg)] border-y-[4px] border-black">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
+      <div>
+        <span class="sec-label mb-4 inline-flex" style="background:var(--lime); color:var(--ink);">Toolbelt</span>
+        <h2 class="font-display text-5xl md:text-7xl uppercase leading-none mt-4">
+          The <span style="color:var(--pink)">stack</span> I wield.
+        </h2>
+      </div>
+      <p class="max-w-md font-medium opacity-80">Fluent across the LLM app stack — from training to serving to orchestration.</p>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-4">
+      <!-- Card -->
+      <div class="brut p-5 bg-[var(--bg)] text-[var(--ink)]">
+        <div class="font-display text-xl uppercase mb-3">AI / ML</div>
+        <ul class="space-y-1 font-mono text-sm">
+          <li>› PyTorch</li><li>› TensorFlow</li><li>› Hugging Face</li>
+          <li>› LangChain</li><li>› OpenAI Agents SDK</li><li>› PEFT / LoRA</li>
+        </ul>
+      </div>
+      <div class="brut p-5 bg-[var(--pink)] text-white">
+        <div class="font-display text-xl uppercase mb-3">RAG / Search</div>
+        <ul class="space-y-1 font-mono text-sm">
+          <li>› FAISS</li><li>› Pinecone</li><li>› Weaviate</li>
+          <li>› text-embedding-3</li><li>› Neo4j</li>
+        </ul>
+      </div>
+      <div class="brut p-5 bg-[var(--lime)] text-[var(--ink)]">
+        <div class="font-display text-xl uppercase mb-3">Backend</div>
+        <ul class="space-y-1 font-mono text-sm">
+          <li>› Python</li><li>› FastAPI</li><li>› WebSocket</li>
+          <li>› Pydantic</li><li>› MongoDB</li><li>› Docker</li>
+        </ul>
+      </div>
+      <div class="brut p-5 bg-[var(--cyan)] text-[var(--ink)]">
+        <div class="font-display text-xl uppercase mb-3">Platforms</div>
+        <ul class="space-y-1 font-mono text-sm">
+          <li>› Vertex AI · GCP</li><li>› Databricks</li>
+          <li>› Whisper v3</li><li>› TwilioML</li><li>› LLaVA</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Certifications strip -->
+    <div class="mt-10 grid md:grid-cols-3 gap-4">
+      <div class="brut-sm p-4 bg-[var(--bg)] text-[var(--ink)] flex items-center gap-3">
+        <div class="w-10 h-10 star-shape bg-[var(--pink)]"></div>
+        <div><div class="font-display text-sm uppercase">Databricks ML Pro</div><div class="font-mono text-[10px] opacity-70">Nov 2025</div></div>
+      </div>
+      <div class="brut-sm p-4 bg-[var(--bg)] text-[var(--ink)] flex items-center gap-3">
+        <div class="w-10 h-10 star-shape bg-[var(--lime)]"></div>
+        <div><div class="font-display text-sm uppercase">Foundations of Agents</div><div class="font-mono text-[10px] opacity-70">Hugging Face · 2025</div></div>
+      </div>
+      <div class="brut-sm p-4 bg-[var(--bg)] text-[var(--ink)] flex items-center gap-3">
+        <div class="w-10 h-10 star-shape bg-[var(--cyan)]"></div>
+        <div><div class="font-display text-sm uppercase">Google ML</div><div class="font-mono text-[10px] opacity-70">Coursera</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ABOUT ======================= -->
+<section id="about" class="relative py-24 px-4 md:px-8">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-12 gap-8 items-start">
+    <div class="md:col-span-5">
+      <span class="sec-label">About</span>
+      <h2 class="font-display text-5xl md:text-6xl uppercase leading-none mt-4 mb-6">
+        Builder's <br/><span class="marker">philosophy.</span>
+      </h2>
+      <!-- ASCII portrait block -->
+      <div class="brut bg-[var(--ink)] text-[var(--lime)] font-mono text-[10px] leading-[1.1] p-4 whitespace-pre">
+<pre>
+    ┌─────────────────────┐
+    │  ░▒▓█ SHIVAM █▓▒░   │
+    │  ██  ██             │
+    │  ██  ██    ● ●      │
+    │  ██████     ─       │
+    │  ██  ██    \_/      │
+    │  ██  ██             │
+    │                     │
+    │  B.TECH · AI/ML     │
+    │  MDU ROHTAK '24     │
+    │  8.2 CGPA           │
+    │  NOIDA · IN         │
+    └─────────────────────┘
+</pre>
+      </div>
+    </div>
+
+    <div class="md:col-span-7 space-y-6">
+      <p class="text-xl md:text-2xl leading-snug font-medium">
+        I grew up taking things apart. I still do — except now it's <span class="marker-pink">inference graphs</span>,
+        agent traces, and retrieval pipelines. Every system I ship is obsessed with two things:
+        <strong>latency you can feel</strong> and <strong>answers you can trust</strong>.
+      </p>
+      <div class="grid sm:grid-cols-3 gap-4">
+        <div class="brut bg-white p-4">
+          <div class="font-display text-4xl text-[var(--pink)]">01</div>
+          <div class="font-display text-sm uppercase mt-1">Ship-or-it-didn't-happen</div>
+          <div class="font-mono text-xs opacity-70 mt-1">Demos lie. Prod tells the truth.</div>
+        </div>
+        <div class="brut bg-white p-4">
+          <div class="font-display text-4xl text-[var(--violet)]">02</div>
+          <div class="font-display text-sm uppercase mt-1">Citations or bust</div>
+          <div class="font-mono text-xs opacity-70 mt-1">Every claim grounded. Every output traceable.</div>
+        </div>
+        <div class="brut bg-white p-4">
+          <div class="font-display text-4xl text-[var(--cyan)]">03</div>
+          <div class="font-display text-sm uppercase mt-1">Measure everything</div>
+          <div class="font-mono text-xs opacity-70 mt-1">If it's not on a dashboard, it's not real.</div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="brut bg-white p-5 md:p-6">
+        <div class="font-mono text-xs uppercase opacity-70 mb-3">Timeline</div>
+        <ol class="space-y-3">
+          <li class="flex gap-4 items-start">
+            <span class="font-mono text-xs pt-1 w-20 shrink-0">2024 – NOW</span>
+            <div><strong class="font-display uppercase text-sm">AI Engineer</strong> · Jellyfish Technologies — agentic systems, RAG, fine-tuning.</div>
+          </li>
+          <li class="flex gap-4 items-start">
+            <span class="font-mono text-xs pt-1 w-20 shrink-0">2020 – 2024</span>
+            <div><strong class="font-display uppercase text-sm">B.Tech · AI/ML</strong> · MDU University Rohtak — CGPA 8.2</div>
+          </li>
+          <li class="flex gap-4 items-start">
+            <span class="font-mono text-xs pt-1 w-20 shrink-0">Always</span>
+            <div><strong class="font-display uppercase text-sm">Building in public</strong> — github.com/shivvamm</div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CONTACT ======================= -->
+<section id="contact" class="relative py-24 px-4 md:px-8 bg-[var(--pink)] border-y-[4px] border-black overflow-hidden">
+  <!-- Big bg type -->
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+    <div class="font-display uppercase text-[22vw] leading-none text-white">HELLO</div>
+  </div>
+
+  <div class="max-w-5xl mx-auto relative">
+    <div class="flex items-end gap-4 mb-8 flex-wrap">
+      <span class="sec-label" style="background:var(--lime); color:var(--ink);">Contact</span>
+      <h2 class="font-display text-5xl md:text-7xl uppercase leading-none text-white">Let's make<br/>something <span class="text-[var(--lime)]">loud</span>.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-5 gap-6">
+      <!-- Form -->
+      <form id="contact-form" action="https://formspree.io/f/mdajbnqk" method="POST" class="md:col-span-3 brut bg-white p-6 md:p-8 space-y-4" onsubmit="return submitForm(event)">
+        <div>
+          <label for="n" class="font-mono text-xs uppercase block mb-1">Your name *</label>
+          <input id="n" name="name" required class="w-full ink-line bg-[var(--bg)] px-4 py-3 font-mono focus:outline-none focus:bg-[var(--lime)]" placeholder="Ada Lovelace" />
+        </div>
+        <div>
+          <label for="e" class="font-mono text-xs uppercase block mb-1">Email *</label>
+          <input id="e" type="email" name="email" required class="w-full ink-line bg-[var(--bg)] px-4 py-3 font-mono focus:outline-none focus:bg-[var(--lime)]" placeholder="you@startup.dev" />
+        </div>
+        <div>
+          <label class="font-mono text-xs uppercase block mb-1">What's this about?</label>
+          <div class="flex flex-wrap gap-2" id="topic-chips">
+            <button type="button" data-val="Hire" class="topic chip cursor-pointer">Hire</button>
+            <button type="button" data-val="Consult" class="topic chip cursor-pointer">Consult</button>
+            <button type="button" data-val="RAG" class="topic chip cursor-pointer">RAG build</button>
+            <button type="button" data-val="Voice" class="topic chip cursor-pointer">Voice AI</button>
+            <button type="button" data-val="Other" class="topic chip cursor-pointer">Other</button>
+          </div>
+          <input type="hidden" name="topic" id="topic-input" value="" />
+        </div>
+        <div>
+          <label for="m" class="font-mono text-xs uppercase block mb-1">Message *</label>
+          <textarea id="m" name="message" required rows="4" class="w-full ink-line bg-[var(--bg)] px-4 py-3 font-mono focus:outline-none focus:bg-[var(--lime)] resize-none" placeholder="What are we building?"></textarea>
+        </div>
+        <button type="submit" class="brut brut-press w-full px-6 py-4 bg-[var(--ink)] text-white font-display uppercase text-lg cursor-pointer">
+          Send it →
+        </button>
+        <div id="form-status" class="font-mono text-xs uppercase hidden"></div>
+      </form>
+
+      <!-- Contact cards -->
+      <div class="md:col-span-2 space-y-4">
+        <a href="mailto:shivam574488@gmail.com" class="brut bg-[var(--lime)] p-5 flex items-start gap-3 cursor-pointer">
+          <svg viewBox="0 0 24 24" class="w-8 h-8 shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="5" width="19" height="14" rx="1.5"/>
+            <path d="M3 7l9 6 9-6"/>
+          </svg>
+          <div>
+            <div class="font-mono text-xs uppercase opacity-70">Email</div>
+            <div class="font-display text-lg break-all">shivam574488<br/>@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://twitter.com/Shivv71" target="_blank" rel="noopener" class="brut bg-[var(--cyan)] p-5 flex items-start gap-3 cursor-pointer">
+          <svg viewBox="0 0 24 24" class="w-8 h-8 shrink-0 mt-1" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          <div>
+            <div class="font-mono text-xs uppercase opacity-70">Twitter / X</div>
+            <div class="font-display text-xl md:text-2xl">@Shivv71</div>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/shivvamm" target="_blank" rel="noopener" class="brut bg-white p-5 flex items-start gap-3 cursor-pointer">
+          <svg viewBox="0 0 24 24" class="w-8 h-8 shrink-0 mt-1" fill="currentColor" aria-hidden="true">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.86-3.04-1.86 0-2.15 1.45-2.15 2.95v5.66H9.32V9h3.41v1.56h.05c.48-.9 1.63-1.86 3.36-1.86 3.59 0 4.26 2.37 4.26 5.45v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+          </svg>
+          <div>
+            <div class="font-mono text-xs uppercase opacity-70">LinkedIn</div>
+            <div class="font-display text-lg">/shivvamm</div>
+          </div>
+        </a>
+        <a href="https://github.com/shivvamm" target="_blank" rel="noopener" class="brut bg-[var(--ink)] text-white p-5 flex items-start gap-3 cursor-pointer">
+          <svg viewBox="0 0 24 24" class="w-8 h-8 shrink-0 mt-1" fill="currentColor" aria-hidden="true">
+            <path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57v-2c-3.34.72-4.03-1.6-4.03-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.08-.74.09-.73.09-.73 1.2.08 1.83 1.23 1.83 1.23 1.07 1.82 2.8 1.3 3.48 1 .11-.77.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.3.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.3c0 .31.2.69.84.57A12 12 0 0 0 12 .3"/>
+          </svg>
+          <div>
+            <div class="font-mono text-xs uppercase opacity-70 text-[var(--lime)]">GitHub</div>
+            <div class="font-display text-lg">/shivvamm</div>
+          </div>
+        </a>
+        <a href="https://huggingface.co/shivvamm" target="_blank" rel="noopener" class="brut p-5 flex items-start gap-3 cursor-pointer" style="background:#FFD21E;">
+          <svg viewBox="0 0 32 32" class="w-8 h-8 shrink-0 mt-1" aria-hidden="true">
+            <circle cx="16" cy="16" r="13" fill="#FFD21E" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="11" cy="14" r="2" fill="#0A0A0A"/>
+            <circle cx="21" cy="14" r="2" fill="#0A0A0A"/>
+            <path d="M10 19 Q16 25 22 19" fill="none" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="7" cy="19" r="2" fill="#FF3EA5" stroke="#0A0A0A" stroke-width="1.5"/>
+            <circle cx="25" cy="19" r="2" fill="#FF3EA5" stroke="#0A0A0A" stroke-width="1.5"/>
+          </svg>
+          <div>
+            <div class="font-mono text-xs uppercase opacity-70">Hugging Face</div>
+            <div class="font-display text-lg">/shivvamm</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="relative py-10 px-4 md:px-8 bg-[var(--ink)] text-[var(--bg)]">
+  <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+    <div class="font-mono text-xs uppercase opacity-70">
+      © 2026 · Shivam Pandey · Built in Noida
+    </div>
+    <div class="flex items-center gap-3 font-mono text-xs uppercase">
+      <span class="inline-block w-2 h-2 bg-[var(--lime)] rounded-full animate-pulse"></span>
+      System online · India
+    </div>
+  </div>
+</footer>
+
+<!-- ======================= SCRIPTS ======================= -->
+<script>
+  // Cursor blob (desktop only)
+  const blob = document.getElementById('blob');
+  if (matchMedia('(pointer:fine)').matches) {
+    window.addEventListener('mousemove', (e)=>{
+      blob.style.left = e.clientX + 'px';
+      blob.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .project-card, input, textarea').forEach(el=>{
+      el.addEventListener('mouseenter', ()=>{ blob.style.width='60px'; blob.style.height='60px'; blob.style.background='var(--pink)'; });
+      el.addEventListener('mouseleave', ()=>{ blob.style.width='24px'; blob.style.height='24px'; blob.style.background='var(--lime)'; });
+    });
+  } else { blob.style.display = 'none'; }
+
+  // GSAP entrance
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from('#h1-l1', {y:80, opacity:0, duration:.7, ease:'power3.out'});
+    gsap.from('#h1-l2', {y:80, opacity:0, duration:.7, delay:.1, ease:'power3.out'});
+    gsap.from('#h1-l3', {y:40, opacity:0, duration:.7, delay:.22, ease:'power3.out'});
+
+    gsap.utils.toArray('.reveal').forEach(el=>{
+      gsap.to(el, { opacity:1, y:0, rotate:0, duration:.8, ease:'power3.out',
+        scrollTrigger:{ trigger:el, start:'top 82%' } });
+    });
+
+    gsap.utils.toArray('.project-card').forEach((card, i)=>{
+      gsap.from(card, {
+        y: 60, opacity:0, duration:.7, delay: i*0.06, ease:'power2.out',
+        scrollTrigger:{ trigger:card, start:'top 88%' }
+      });
+    });
+  }
+
+  // Scroll progress bar
+  const prog = document.getElementById('progress');
+  const onScroll = () => {
+    const h = document.documentElement;
+    const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    prog.style.width = p + '%';
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Animated counters
+  const animateCount = (el) => {
+    const target = parseFloat(el.dataset.to);
+    const suffix = el.dataset.suffix || '';
+    const dur = 1400;
+    const start = performance.now();
+    const from = 0;
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(from + (target - from) * eased);
+      el.textContent = (target >= 1000 ? val.toLocaleString() : val) + suffix;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const countIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ animateCount(e.target); countIO.unobserve(e.target); }
+    });
+  }, { threshold: .4 });
+  document.querySelectorAll('.count').forEach(el=>countIO.observe(el));
+
+  // Topic chips
+  document.querySelectorAll('.topic').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.topic').forEach(x=>{ x.style.background=''; x.style.color=''; });
+      b.style.background = 'var(--ink)';
+      b.style.color = 'white';
+      document.getElementById('topic-input').value = b.dataset.val;
+    });
+  });
+
+  // Form (Formspree AJAX)
+  async function submitForm(e){
+    e.preventDefault();
+    const f = e.target;
+    const status = document.getElementById('form-status');
+    const btn = f.querySelector('button[type="submit"]');
+    const originalBtnText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    status.classList.remove('hidden');
+    status.style.color = '';
+    status.textContent = '> Transmitting…';
+
+    try {
+      const res = await fetch(f.action, {
+        method: 'POST',
+        body: new FormData(f),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        status.style.color = 'var(--ink)';
+        status.textContent = '✓ Sent. I\'ll reply within 24h.';
+        f.reset();
+        document.querySelectorAll('.topic').forEach(x=>{ x.style.background=''; x.style.color=''; });
+        document.getElementById('topic-input').value = '';
+      } else {
+        const data = await res.json().catch(()=>({}));
+        status.style.color = '#B91C1C';
+        status.textContent = '✗ ' + (data.errors?.[0]?.message || 'Submission failed. Try again.');
+      }
+    } catch(err) {
+      status.style.color = '#B91C1C';
+      status.textContent = '✗ Network error. Try again.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalBtnText;
+    }
+    return false;
+  }
+</script>
+
+</body>
 </html>
